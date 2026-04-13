@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Cheese Vol - 치지직 채널별 볼륨 관리",
+  "version": "1.0.0",
+  "description": "치지직 채널별 볼륨 관리 및 자동 볼륨 저장",
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "src/entry/popup/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.chzzk.naver.com/*"],
+      "js": ["src/entry/content/content.ts"],
+      "run_at": "document_idle"
+    }
+  ]
+}
