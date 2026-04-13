@@ -2,6 +2,7 @@ import AsyncUtil from "../../util/asyncUtil";
 import storage from "../../core/storage/channelStorage";
 import Channel from "../../domain/channel";
 import { PlayerElements } from "../../type/elements";
+import cheesevolToast from "../../toast/cheesevolToast";
 
 /**
  * 볼륨과 관련된 세부 로직을 구현하는 핸들러
@@ -32,11 +33,14 @@ class VolumeHandler {
     async restoreVolume(channelId: string, volumeControl: Element, playerElements: PlayerElements) {
         const savedChannel = await storage.get(channelId);
         if (!savedChannel) {
+            cheesevolToast.showToast("현재 채널은 볼륨이 저장되어 있지 않아요!\n볼륨을 한 번이라도 변경하면 자동 저장돼요.", playerElements.video, 4000);
             return;
         }
 
         playerElements.video.volume = savedChannel.channelVolume;
         this.syncVolumeUI(savedChannel, volumeControl);
+
+        cheesevolToast.showToast(`${savedChannel.channelName} 방송의 볼륨이 저장된 볼륨으로 설정되었어요: ${savedChannel.volumePercent}%`, playerElements.video);
     }
 
     // 메서드 각 로직 더 공부해보기
@@ -75,7 +79,6 @@ class VolumeHandler {
 
     private handleVolumeSliderPointerDown(channel: Channel, playerElements: PlayerElements) {
         const handlePointerUp = async () => {
-            console.log(channel);
             await this.saveCurrentVolume(channel, playerElements.video);
         };
         // signal: 혹시라도 이벤트가 삭제되지 않을 때를 대비해 확실하게 제거하기 위해 연결
@@ -91,6 +94,8 @@ class VolumeHandler {
     private async saveCurrentVolume(channel: Channel, video: HTMLVideoElement) {
         channel.updateVolume(video.muted ? 0.0 : video.volume);
         await storage.save(channel);
+
+        cheesevolToast.showToast(`${channel.channelName} 방송의 볼륨이 업데이트되었어요: ${channel.volumePercent}%`, video);
     }
 }
 
