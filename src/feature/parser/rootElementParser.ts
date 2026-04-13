@@ -10,7 +10,7 @@ class RootElementParser {
      * RootElements에 해당하는 요소들을 파싱하되, 해당 요소들이 생성될 때까지 대기 후 파싱합니다.
      * @param waitingTimeMs 최대 대기 시간, 해당 시간이 지나면 자동으로 파싱이 취소되고 예외가 발생합니다.
      */
-    async parseRootElementsWhenAvailable(waitingTimeMs: number = 20000): Promise<RootElements> {
+    async parseRootElementsWhenAvailable(waitingTimeMs: number = 60000): Promise<RootElements> {
         if (this.waitingObserver) {
             this.waitingObserver.disconnect();
             this.waitingObserver = null;
@@ -21,7 +21,7 @@ class RootElementParser {
             const timeoutId = setTimeout(() => {
                 this.waitingObserver?.disconnect();
                 this.waitingObserver = null;
-                reject(new Error("Waiting time over: Core elements not found"));
+                reject(new Error("Waiting time over: Root elements not found"));
             }, waitingTimeMs); // 무한 대기 방지
 
             this.waitingObserver = new MutationObserver((mutations, obs) => {
