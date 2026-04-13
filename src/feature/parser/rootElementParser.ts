@@ -12,15 +12,13 @@ class RootElementParser {
      */
     async parseRootElementsWhenAvailable(waitingTimeMs: number = 60000): Promise<RootElements> {
         if (this.waitingObserver) {
-            this.waitingObserver.disconnect();
-            this.waitingObserver = null;
+            this.clearObserver();
         }
 
         await AsyncUtil.waitForTick();
         return new Promise((resolve, reject) => {
             const timeoutId = setTimeout(() => {
-                this.waitingObserver?.disconnect();
-                this.waitingObserver = null;
+                this.clearObserver();
                 reject(new Error("Waiting time over: Root elements not found"));
             }, waitingTimeMs); // 무한 대기 방지
 
@@ -28,8 +26,7 @@ class RootElementParser {
                 const elements = this.getRootElements();
                 if (elements) {
                     clearTimeout(timeoutId);
-                    obs.disconnect();
-                    this.waitingObserver = null;
+                    this.clearObserver(obs);
 
                     resolve(elements);
                 }
@@ -57,6 +54,18 @@ class RootElementParser {
             return { informationDetail: informationDetail, player: player, volumeControl: volumeControl }
         }
         return null;
+    }
+
+    /**
+     * <p>현재 사용중인 mutation observer들을 제거</p>
+     * <p>인자로 넘어온 observer과 필드인 waitingObserver를 모두 제거합니다.</p>
+     * @param obs 콜백 내부 등에서 인자로 얻은 observer, 없다면 생략 (경우에 따라 waitingObserver과 같은 객체를 참조할 수 있습니다.)
+     */
+    private clearObserver(obs?: MutationObserver) {
+        obs?.disconnect();
+
+        this.waitingObserver?.disconnect();
+        this.waitingObserver = null;
     }
 }
 
