@@ -8,7 +8,7 @@ class ChannelStorage {
         const channels = await this.getChannels();
 
         channels[channel.channelId] = data;
-        await chrome.storage.sync.set({ channels });
+        await chrome.storage.local.set({ channels });
     }
 
     async get(id: string): Promise<Channel | null> {
@@ -23,7 +23,7 @@ class ChannelStorage {
     }
 
     private async getChannels() {
-        const result = await chrome.storage.sync.get(["channels"]);
+        const result = await chrome.storage.local.get(["channels"]);
         return (result.channels ?? {}) as Record<string, ChannelData>;
     }
 }
