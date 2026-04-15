@@ -37,9 +37,9 @@ class RootElementParser {
     }
 
     private getRootElements(): RootElements | null {
-        const root = Array.from(document.querySelectorAll('div[class^="live_information_details"]'))
+        const root = Array.from(document.querySelectorAll('div[class^="video_information_container"]'))
             .filter(el => el.isConnected && getComputedStyle(el).display !== "none");
-        const player = document.querySelector('div[class^="live_information_player"]');
+        const player = document.querySelector('div[id*="player_layout"]');
         const volumeControl = player?.querySelector(".pzp-pc__volume-control");
 
         if (root.length >= 2 && player && player.isConnected && volumeControl && volumeControl.isConnected) {

@@ -16,7 +16,7 @@ class ChannelParser {
             throw new Error("Channel ID not found");
         }
 
-        return href.replace(/\//g, '').trim();
+        return href.replace(/(live)?\//g, '').trim();
     }
 
     private parseChannelName(informationDetail: Element): string {
