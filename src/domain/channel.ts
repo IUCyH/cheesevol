@@ -29,7 +29,7 @@ class Channel {
     }
 
     get volumePercent(): string {
-        return `${ (this.volume * 100) }%`;
+        return `${ (Math.round(this.volume * 100)) }%`;
     }
 
     updateVolume(volume: number): void {

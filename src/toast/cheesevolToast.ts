@@ -8,6 +8,10 @@ class CheesevolToast {
             throw new Error("Video element's parent not found");
         }
 
+        if (getComputedStyle(root).position === "static") {
+            root.style.position = "relative";
+        }
+
         this.clearOldToast(root);
 
         const toast = document.createElement("div");
@@ -16,10 +20,11 @@ class CheesevolToast {
 
         Object.assign(toast.style, {
             position: "absolute",
-            top: "15px",
-            right: "15px",
-            padding: "8px 16px",
-            borderRadius: "8px",
+            top: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            padding: "13px 16px",
+            borderRadius: "6px",
             backgroundColor: "#00FFA3",
             color: "#1A0E0E",
             fontSize: "16px",
