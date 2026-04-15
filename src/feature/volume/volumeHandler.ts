@@ -38,43 +38,9 @@ class VolumeHandler {
         }
 
         playerElements.video.volume = savedChannel.channelVolume;
-        this.syncVolumeUI(savedChannel, volumeControl);
+        playerElements.video.dispatchEvent(new Event('volumechange'));
 
         cheesevolToast.showToast(`${savedChannel.channelName} 방송의 볼륨이 저장된 볼륨으로 설정되었어요: ${savedChannel.volumePercent}%`, playerElements.video);
-    }
-
-    // 메서드 각 로직 더 공부해보기
-    private syncVolumeUI(channel: Channel, volumeControl: Element) {
-        const volume = channel.channelVolume;
-        const volumePercent = channel.volumePercent;
-
-        // 1. ARIA 슬라이더 값 업데이트
-        const slider = volumeControl.querySelector('div[role="slider"]');
-        if (slider) {
-            slider.setAttribute('aria-valuenow', volumePercent.toString());
-            slider.setAttribute('aria-valuetext', `${volumePercent} percent`);
-        }
-
-        // 2. 숨겨진 Input 값 업데이트 및 이벤트 발생 (치지직 내부 상태 반영용)
-        const rangeInput = volumeControl.querySelector('input.pzp-ui-slider__aria-range') as HTMLInputElement;
-        if (rangeInput) {
-            rangeInput.value = volumePercent.toString();
-            // UI를 그리는 스크립트가 input 이벤트를 감시할 수 있으므로 강제 발생
-            rangeInput.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-
-        // 3. 파란색 게이지(Progress Bar) 업데이트
-        const progressBar = volumeControl.querySelector('.pzp-ui-progress__volume') as HTMLElement;
-        if (progressBar) {
-            progressBar.setAttribute('value', volume.toString());
-            progressBar.style.setProperty('--pzp-ui-progress__scale', volume.toString());
-        }
-
-        // 4. 동그란 조절 버튼(Handler) 위치 업데이트
-        const handler = volumeControl.querySelector('.pzp-ui-slider__handler-wrap') as HTMLElement;
-        if (handler) {
-            handler.style.left = `${volumePercent}%`;
-        }
     }
 
     private handleVolumeSliderPointerDown(channel: Channel, playerElements: PlayerElements) {
