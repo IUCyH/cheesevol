@@ -10,7 +10,7 @@ class VolumeManager {
     async initVolume(channel: Channel, rootElements: RootElements) {
         const playerElements = this.getPlayerElements(rootElements.player, rootElements.volumeControl);
         volumeHandler.initVolumeListener(channel, playerElements);
-        await volumeHandler.restoreVolume(channel.channelId, rootElements.volumeControl, playerElements);
+        await volumeHandler.restoreVolume(channel.channelId, playerElements.video);
     }
 
     private getPlayerElements(player: Element, volumeControl: Element): PlayerElements {

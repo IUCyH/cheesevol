@@ -30,17 +30,17 @@ class VolumeHandler {
         );
     }
 
-    async restoreVolume(channelId: string, volumeControl: Element, playerElements: PlayerElements) {
+    async restoreVolume(channelId: string, video: HTMLVideoElement) {
         const savedChannel = await storage.get(channelId);
         if (!savedChannel) {
-            cheesevolToast.showToast("현재 채널은 볼륨이 저장되어 있지 않아요!\n볼륨을 한 번이라도 변경하면 자동 저장돼요.", playerElements.video, 4000);
+            cheesevolToast.showToast("현재 채널은 볼륨이 저장되어 있지 않아요!\n볼륨을 한 번이라도 변경하면 자동 저장돼요.", video, 4000);
             return;
         }
 
-        playerElements.video.volume = savedChannel.channelVolume;
-        playerElements.video.dispatchEvent(new Event('volumechange'));
+        video.volume = savedChannel.channelVolume;
+        video.dispatchEvent(new Event('volumechange'));
 
-        cheesevolToast.showToast(`${savedChannel.channelName} 방송의 볼륨이 저장된 볼륨으로 설정되었어요: ${savedChannel.volumePercent}%`, playerElements.video);
+        cheesevolToast.showToast(`${savedChannel.channelName} 방송의 볼륨이 저장된 볼륨으로 설정되었어요: ${savedChannel.volumePercent}%`, video);
     }
 
     private handleVolumeSliderPointerDown(channel: Channel, playerElements: PlayerElements) {
