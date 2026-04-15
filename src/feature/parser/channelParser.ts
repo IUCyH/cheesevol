@@ -1,12 +1,22 @@
 import Channel from "../../domain/channel";
+import WaitableElementParser from "../../core/template/waitableElementParser";
 
 class ChannelParser {
 
-    parseChannel(informationDetail: Element): Channel {
-        const id = this.parseChannelId(informationDetail);
-        const name = this.parseChannelName(informationDetail);
-        const profileUrl = this.parseChannelProfileUrl(informationDetail);
-        return new Channel(id, name, profileUrl);
+    async parseChannel(informationDetail: Element): Promise<Channel> {
+        const parser = new WaitableElementParser<Channel>();
+        return await parser.parseElementsWhenAvailable(() => {
+            try {
+                const id = this.parseChannelId(informationDetail);
+                const name = this.parseChannelName(informationDetail);
+                const profileUrl = this.parseChannelProfileUrl(informationDetail);
+
+                return new Channel(id, name, profileUrl);
+            } catch (error) {
+                console.error("Error parsing channel:", error);
+                return null;
+            }
+        });
     }
 
     private parseChannelId(informationDetail: Element): string {
