@@ -25,7 +25,7 @@ class CheesevolToast {
             transform: "translateX(-50%)",
             padding: "12px 16px",
             borderRadius: "6px",
-            backgroundColor: "#00FFA3",
+            backgroundColor: "#c09ee8",
             color: "#000000",
             fontFamily: "system-ui, sans-serif",
             fontSize: "16px",
