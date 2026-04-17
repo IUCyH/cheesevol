@@ -55,9 +55,10 @@ class VolumeHandler {
     }
 
     private async handleMuteButtonClick(channel: Channel, playerElements: PlayerElements) {
-        // 뮤트 버튼은 콜백 호출 시점에 내부 처리가 아직 끝나지 않았을 수 있으므로 강제로 한 틱 대기
         await AsyncUtil.waitForTick();
-        await this.saveCurrentVolume(channel, playerElements);
+        if (!playerElements.video.muted) { // 음소거 해제 시 현재 저장된 최신값으로 다시 볼륨 설정
+            await this.restoreVolume(channel.channelId, playerElements);
+        }
     }
 
     private async saveCurrentVolume(channel: Channel, playerElements: PlayerElements) {
