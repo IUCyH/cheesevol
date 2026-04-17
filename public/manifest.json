@@ -3,6 +3,12 @@
   "name": "Cheese Vol - 치지직 채널별 볼륨 관리",
   "version": "1.0.0",
   "description": "치지직 채널별 볼륨 관리 및 자동 볼륨 저장",
+  "icons": {
+    "16": "images/icons/cheesevol_16.png",
+    "32": "images/icons/cheesevol_32.png",
+    "48": "images/icons/cheesevol_48.png",
+    "128": "images/icons/cheesevol_128.png"
+  },
   "permissions": [
     "storage"
   ],

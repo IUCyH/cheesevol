@@ -23,7 +23,7 @@ class CheesevolToast {
             top: "20px",
             left: "50%",
             transform: "translateX(-50%)",
-            padding: "12px 16px",
+            padding: "12px 18px",
             borderRadius: "6px",
             backgroundColor: "#C09EE8",
             color: "#272725",

@@ -2,10 +2,26 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./popup.css">
+    <title>Cheese Vol</title>
 </head>
 <body>
-    <h1>Hello World</h1>
-    <script type="module" src="./popup.ts"></script>
+    <header class="cv-header">
+        <div class="cv-logo">
+            <img class="cv-logo img" src="../../../images/icons/cheesevol_32.png" alt="Cheese Vol">
+            <h1 class="cv-logo text">Cheese Vol</h1>
+        </div>
+        <div class="cv-menu">
+            <button class="cv-menu primary" id="refreshBtn">새로고침</button>
+        </div>
+    </header>
+
+    <div class="channel-list">
+        <div class="no-channel">
+            <p>현재는 저장된 채널이 없어요.</p>
+        </div>
+    </div>
+    <script src="./popup.ts" type="module"></script>
 </body>
 </html>

@@ -35,7 +35,7 @@ class VolumeHandler {
         const video = playerElements.video;
 
         if (!savedChannel) {
-            cheesevolToast.showToast("현재 채널은 볼륨이 저장되어 있지 않아요!\n볼륨을 한 번이라도 변경하면 자동 저장돼요.", video, 4000);
+            cheesevolToast.showToast("현재 채널은 볼륨이 저장되어 있지 않아요!\n볼륨을 한 번이라도 변경하면 자동 저장돼요.", video, 5000);
             return;
         }
 
