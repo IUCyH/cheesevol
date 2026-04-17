@@ -10,7 +10,7 @@ class VolumeManager {
 
     async initVolume(channel: Channel, rootElements: RootElements) {
         const playerElements = await this.parsePlayerElements(rootElements.player, rootElements.volumeControl);
-        volumeHandler.initVolumeListener(channel, playerElements);
+        volumeHandler.initVolumeListener(channel, playerElements, rootElements.player);
 
         playerElements.video.addEventListener("playing", async () => {
             setTimeout(() => void volumeHandler.restoreVolume(channel.channelId, playerElements), 800);

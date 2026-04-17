@@ -11,7 +11,7 @@ class VolumeHandler {
 
     private abortController: AbortController | null = null;
 
-    initVolumeListener(channel: Channel, playerElements: PlayerElements) {
+    initVolumeListener(channel: Channel, playerElements: PlayerElements, player: Element) {
         const { volumeSlider, muteButton } = playerElements;
 
         if (this.abortController) {
@@ -20,6 +20,10 @@ class VolumeHandler {
         }
         this.abortController = new AbortController();
 
+        player.addEventListener("keyup",
+            (e) => this.handlePlayerKeyUp(e, channel, playerElements),
+            { signal: this.abortController.signal }
+        );
         volumeSlider.addEventListener("pointerdown",
             () => this.handleVolumeSliderPointerDown(channel, playerElements),
             { signal: this.abortController.signal }
@@ -45,6 +49,17 @@ class VolumeHandler {
         cheesevolToast.showToast(`${savedChannel.channelName} 방송의 볼륨이 저장된 볼륨으로 설정되었어요: ${savedChannel.volumePercent}`, video);
     }
 
+    private async handlePlayerKeyUp(e: Event, channel: Channel, playerElements: PlayerElements) {
+        if (!(e instanceof KeyboardEvent)) {
+            return;
+        }
+
+        if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+            await AsyncUtil.waitForTick();
+            await this.saveCurrentVolume(channel, playerElements);
+        }
+    }
+
     private handleVolumeSliderPointerDown(channel: Channel, playerElements: PlayerElements) {
         const handlePointerUp = async () => {
             await AsyncUtil.waitForTick();
@@ -62,18 +77,21 @@ class VolumeHandler {
     }
 
     private async saveCurrentVolume(channel: Channel, playerElements: PlayerElements) {
-        const video = playerElements.video;
-        const volumeSlider = playerElements.volumeSlider;
-        const ariaValue = volumeSlider.ariaValueNow;
+        storage.debounceSave(channel, () => {
+            const video = playerElements.video;
+            const volumeSlider = playerElements.volumeSlider;
+            const ariaValue = volumeSlider.ariaValueNow;
 
-        if (ariaValue === null) {
-            throw new Error("aria-value-now attribute not found");
-        }
+            if(ariaValue === null) {
+                throw new Error("aria-value-now attribute not found");
+            }
 
-        channel.updateVolume(video.muted ? 0 : Number(ariaValue) / 100);
-        await storage.save(channel);
-
-        cheesevolToast.showToast(`${channel.channelName} 방송의 볼륨이 업데이트되었어요: ${channel.volumePercent}`, video);
+            const newVolume = Number(ariaValue) / 100;
+            channel.updateVolume(video.muted ? 0 : newVolume);
+            return video;
+        }, (video) => {
+            cheesevolToast.showToast(`${ channel.channelName } 방송의 볼륨이 업데이트되었어요: ${ channel.volumePercent }`, video);
+        });
     }
 }
 
