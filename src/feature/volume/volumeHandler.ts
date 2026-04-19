@@ -66,14 +66,12 @@ class VolumeHandler {
         }
 
         if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-            await AsyncUtil.waitForTick();
             this.debouncedSaveVolume(channel, playerElements);
         }
     }
 
     private handleVolumeSliderPointerDown(channel: Channel, playerElements: PlayerElements) {
         const handlePointerUp = async () => {
-            await AsyncUtil.waitForTick();
             this.debouncedSaveVolume(channel, playerElements);
         };
         // signal: 혹시라도 이벤트가 삭제되지 않을 때를 대비해 확실하게 제거하기 위해 연결
@@ -103,8 +101,9 @@ class VolumeHandler {
             throw new Error("aria-value-now attribute not found");
         }
 
-        const newVolume = Number(ariaValue) / 100;
-        channel.updateVolume(video.muted ? 0 : newVolume);
+        const ariaValueNumber = Number(ariaValue);
+        const newVolume = ariaValueNumber === 0 ? 0 : ariaValueNumber / 100;
+        channel.updateVolume(newVolume);
         await storage.save(channel);
 
         cheesevolToast.showToast(`${ channel.channelName } 방송의 볼륨이 업데이트되었어요: ${ channel.volumePercent }`, video);

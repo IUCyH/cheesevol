@@ -13,7 +13,7 @@ class VolumeManager {
         volumeHandler.initVolumeListener(channel, playerElements, rootElements.player);
 
         playerElements.video.addEventListener("playing", async () => {
-            setTimeout(() => void volumeHandler.restoreVolume(channel.channelId, playerElements), 800);
+            setTimeout(() => void volumeHandler.restoreVolume(channel.channelId, playerElements), 500);
         }, { once: true });
     }
 
